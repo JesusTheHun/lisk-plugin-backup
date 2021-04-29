@@ -8,7 +8,7 @@ import {ReadStream} from 'fs';
 
 export class BackupPlugin extends BasePlugin {
     static get alias() {
-        return 'health';
+        return 'backup';
     };
 
     static get info(){
