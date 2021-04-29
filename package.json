@@ -18,7 +18,10 @@
     "build": "tsc"
   },
   "dependencies": {
-    "lisk-sdk": "^5.0.4"
+    "aws4": "^1.11.0",
+    "lisk-sdk": "^5.0.4",
+    "pump": "^3.0.0",
+    "tar": "^6.1.0"
   },
   "devDependencies": {
     "@types/node": "^12",
