@@ -1,7 +1,7 @@
 import {Adapter} from "../types";
-import aws4 from 'aws4';
+import {RequestSigner} from 'aws4';
 import * as https from 'https';
-import pump from 'pump';
+import * as pump from 'pump';
 import {ReadStream} from "fs";
 
 export interface S3AdapterParams {
@@ -26,7 +26,7 @@ export class S3Adapter implements Adapter {
     })
   }
 
-  async getObjectWriteStream() {
+  protected async getObjectWriteStream() {
     const config = {
       accessKeyId: this.params.accessKey,
       secretAccessKey: this.params.privateKey,
@@ -34,7 +34,7 @@ export class S3Adapter implements Adapter {
       endpoint: this.params.endpoint,
     }
 
-    const hash = aws4.sign({
+    const hash = new RequestSigner({
       service: 's3',
       region: config.region,
       method: 'PUT',
@@ -43,7 +43,7 @@ export class S3Adapter implements Adapter {
       headers: {
         'Content-Type': 'application/octet-stream'
       }
-    }, config)
+    }, config).sign();
 
     return https.request({
       hostname: config.endpoint,
