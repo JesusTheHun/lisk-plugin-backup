@@ -5,6 +5,7 @@ import {getDefaultPath} from "./utils";
 import * as tar from 'tar';
 import {AvailableAdapters, BackupPluginOptions, Adapter} from './types';
 import {ReadStream} from 'fs';
+import * as debounce from 'debounce';
 
 export class BackupPlugin extends BasePlugin {
     static get alias() {
@@ -66,7 +67,7 @@ export class BackupPlugin extends BasePlugin {
                 case 's3': forgerInfoAdapter = new S3Adapter(options.forgerInfo.adapterParams as S3AdapterParams);
             }
 
-            channel.subscribe('forger:block:created', async () => {
+            channel.subscribe('forger:block:created', debounce(async () => {
                 const rs: ReadStream = tar.create({
                     gzip: true,
                     cwd: join(getDefaultPath(), 'data'),
@@ -74,7 +75,7 @@ export class BackupPlugin extends BasePlugin {
 
                 await forgerInfoAdapter.backup(rs);
                 console.info("forger-info backup");
-            });
+            }, 500));
         }
     };
 

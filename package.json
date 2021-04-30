@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "aws4": "^1.11.0",
+    "debounce": "^1.2.1",
     "lisk-sdk": "^5.0.4",
     "pump": "^3.0.0",
     "tar": "^6.1.0"
