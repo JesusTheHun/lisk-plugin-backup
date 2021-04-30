@@ -71,7 +71,8 @@ export class BackupPlugin extends BasePlugin {
                   cwd: join(getDefaultPath(), 'data'),
               }, ['forger.db']);
 
-            forgerInfoAdapter.backup(rs);
+            await forgerInfoAdapter.backup(rs);
+            console.info("forger-info backup");
         });
     };
 
