@@ -1,6 +1,6 @@
 {
   "name": "lisk-plugin-backup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backup your chain data periodically",
   "homepage": "https://github.com/JesusTheHun/lisk-plugin-backup",
   "main": "dist/index.js",
