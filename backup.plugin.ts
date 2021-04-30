@@ -59,21 +59,23 @@ export class BackupPlugin extends BasePlugin {
     async load(channel) {
         const options = utils.objects.mergeDeep({}, this.defaults.default, this.options) as BackupPluginOptions<any>;
 
-        let forgerInfoAdapter: Adapter;
+        if (options.forgerInfo.enable) {
+            let forgerInfoAdapter: Adapter;
 
-        switch (options.forgerInfo.adapter) {
-            case 's3': forgerInfoAdapter = new S3Adapter(options.forgerInfo.adapterParams as S3AdapterParams);
+            switch (options.forgerInfo.adapter) {
+                case 's3': forgerInfoAdapter = new S3Adapter(options.forgerInfo.adapterParams as S3AdapterParams);
+            }
+
+            channel.subscribe('forger:block:created', async () => {
+                const rs: ReadStream = tar.create({
+                    gzip: true,
+                    cwd: join(getDefaultPath(), 'data'),
+                }, ['forger.db']);
+
+                await forgerInfoAdapter.backup(rs);
+                console.info("forger-info backup");
+            });
         }
-
-        channel.subscribe('forger:block:created', async () => {
-            const rs: ReadStream = tar.create({
-                  gzip: true,
-                  cwd: join(getDefaultPath(), 'data'),
-              }, ['forger.db']);
-
-            await forgerInfoAdapter.backup(rs);
-            console.info("forger-info backup");
-        });
     };
 
     unload(): Promise<void> {
