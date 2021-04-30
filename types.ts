@@ -19,5 +19,5 @@ export interface BackupPluginOptions<T extends BackupPluginAdapter> {
 }
 
 export abstract class Adapter {
-  abstract backup(rs: ReadStream);
+  abstract async backup(rs: ReadStream);
 }
