@@ -45,7 +45,11 @@ const appConfig = utils.objects.mergeDeep({}, configDevnet, {
                   "privateKey": "YOUR_PRIVATE_KEY",
                   "region": "YOUR_REGION",
                   "endpoint": "YOUR_BUCK_HOSTNAME_WITHOUT_SCHEME",
-                  "objectPath": "DESTINATION_PATH"
+                  "objectPath": "DESTINATION_PATH",
+                  "metadata": { // arbitratry metadata for the S3 object
+                      "chain": "MY_CHAIN_NAME",
+                      "network": "devnet"
+                  }
               }
           }
       }
