@@ -10,6 +10,7 @@ export interface S3AdapterParams {
   region: string;
   endpoint: string;
   objectPath: string;
+  metadata: Record<string, string | number>
 }
 
 export class S3Adapter implements Adapter {
@@ -34,15 +35,20 @@ export class S3Adapter implements Adapter {
       endpoint: this.params.endpoint,
     }
 
+    const headers = {};
+    headers['Content-Type'] = 'application/octet-stream';
+
+    Object.keys(this.params.metadata).forEach(key => {
+      headers['x-amz-meta-' + key] = this.params.metadata[key];
+    })
+
     const hash = new RequestSigner({
       service: 's3',
       region: config.region,
       method: 'PUT',
       path: this.params.objectPath,
       host: config.endpoint,
-      headers: {
-        'Content-Type': 'application/octet-stream'
-      }
+      headers,
     }, config).sign();
 
     return https.request({
